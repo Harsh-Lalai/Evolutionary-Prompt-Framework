@@ -1,0 +1,65 @@
+Prompt ID,Prompt
+1,"You are the questioner in the 20-questions game. You will be asking questions which can at any point lead to the question/guess as to what the item is.
+
+A good strategy starts with broad, categorizing questions and progressively becomes more specific. Here's a possible set of the first five questions that could effectively narrow down a wide range of possibilities:
+
+1. Is it a living thing?
+
+This question immediately splits all objects into two large groups: animate and inanimate.
+
+2. Is it man-made?
+
+If the answer to the first question is ""no"" (it is not a living thing), this question helps separate natural objects from objects created by humans (like tools, machines, and other artifacts). If the answer to the first question is ""yes,"" this question can still apply to distinguish between natural beings and artificially created or modified organisms, though it might be less effective.
+
+3. Is it larger than a breadbox? (Or a similar standard size item, like a microwave)
+
+This question is traditional in 20 questions and provides a good measure of size, further dividing objects based on their physical scale.
+
+4. Is it used primarily indoors/outdoors?
+
+This question helps to categorize objects based on their common use environments, which is particularly helpful for identifying objects that are tools, furniture, vehicles, etc.
+
+5. Does it require electricity or any form of power to operate?
+
+This question helps to separate mechanical or electronic items from those that do not require power, which is useful particularly for man-made objects. 
+
+You can keep going from here!"
+2,"You are the questioner in a game of 20 questions. Your strategy is to divide the field of possibilities in half with each question. Begin by asking if the object is living or non-living, then determine if it's natural or man-made. Continue this binary categorization until you pinpoint the specific object. Record your questions and the reasoning behind each choice. Example questions: 1. Is it living? 2. Is it a human-made object? 3. Is it primarily used indoors? 4. Does it serve a functional purpose?"
+3,"As the questioner in a game of 20 questions, use sensory information to identify the object. Start by determining if the object can be seen or is invisible (like sound or smell). Follow with inquiries about the object's color, texture, sound, and smell. Leverage these sensory inputs to progressively narrow down the possibilities, aiming to guess the object accurately. Example questions: 1. Can it be seen? 2. Does it have a distinctive smell? 3. Does it make a sound? 4. Is it softer than a sponge?"
+4,"In this game of 20 questions, you are the questioner, focusing on the functionality and usage of the object. Begin by querying whether the object is used indoors or outdoors. Continue by exploring its primary function, whether it's utilized for work, leisure, or daily activities. Each question should strategically halve the remaining possibilities based on the object's use. Example questions: 1. Is it used indoors? 2. Is it used for entertainment purposes? 3. Does it require electricity? 4. Is it portable?"
+5,"You are about to play a game of 20 Questions as the questioner. Your goal is to guess the object, person, or concept that the other player is thinking of by asking up to 20 yes-or-no questions. To be a highly effective questioner and win the game, follow these strategies:
+
+Start with broad, category-narrowing questions to quickly eliminate large groups of possibilities. For example:
+
+""Is it a living thing?""
+""Is it larger than a breadbox?""
+""Is it a man-made object?""
+
+
+Based on the answers, ask increasingly specific questions to narrow down the possibilities further. For instance, if the answer to ""Is it a living thing?"" is ""yes,"" follow up with questions like:
+
+""Is it a plant?""
+""Is it an animal?""
+""Is it a mammal?""
+
+Use the information gained from each answer to logically deduce what the object might be and ask questions that can confirm or deny your suspicions.
+
+Keep track of the answers given and use process of elimination to rule out possibilities.
+If you suspect you know the answer, consider asking a question that would confirm it without directly guessing. For example, if you think the answer is ""dog,"" you might ask, ""Is it a common household pet?""
+
+Don't be afraid to make an educated guess before using up all 20 questions, especially if you feel confident based on the answers provided.
+
+Now, let's begin the game. Here are your first few questions:
+
+""Is it a physical object?""
+If yes: ""Is it smaller than a car?""
+If no: ""Is it a concept or an idea?""
+If the object is smaller than a car: ""Is it typically found indoors?""
+If it's a concept or idea: ""Is it related to emotions or feelings?""
+
+Continue asking questions based on the answers provided, using the strategies outlined above. Remember to be strategic, use process of elimination, and make educated guesses when appropriate. Good luck!"
+6,"Focus on asking questions that first help you determine the broad category of the object (e.g., living, non-living, location, action). Once you’ve identified the category, progressively narrow it down by asking about key attributes like function, material, or common uses. Think of your questions as a funnel, starting wide and becoming more specific as you go."
+7,"Visualize the object in context. Imagine where and how it might be found. Ask questions that focus on its environment and interactions—such as 'Would you find this in a home?', 'Is it something people use daily?', or 'Is it commonly associated with a specific time of year?' This helps frame the object within its real-world usage."
+8,"Try comparing the unknown object to known objects. Ask questions that compare it in terms of size, material, or use, like 'Is it bigger than a loaf of bread?', 'Is it used similarly to a phone?', or 'Does it feel like a book?'. By creating a mental image through comparison, you can rapidly narrow down possibilities."
+9,"Ask about uncommon or unique characteristics that could quickly identify the object. For instance, instead of asking broad questions, focus on its more distinctive features, like 'Does it make noise?', 'Is it something you would see on a beach?', or 'Is it typically used by children?'. These less obvious traits might give you the key to the answer earlier than expected."
+10,"Instead of focusing on the object's physical attributes, ask questions that explore how the object interacts with people or the world around it. For example, 'Is it something people would hold?', 'Does it require any power to function?', or 'Can it be controlled by someone?' By focusing on the object's behavior—how it’s used, whether it moves, whether it changes shape or function—you’ll approach the answer from a unique perspective, considering its actions rather than just its appearance or category."
