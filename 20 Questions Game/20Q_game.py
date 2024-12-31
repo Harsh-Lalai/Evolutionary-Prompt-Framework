@@ -82,26 +82,34 @@ top_bottom_prompts_dict_poc = {}
 
 #Function for the API calls
 def api_call_openai(model_name, prompt, temp, max_tokens):
-    response = client.chat.completions.create(
-        model= model_name,
-        temperature= temp,
-        messages=[{"role": "user", "content": prompt}],
-        max_tokens= max_tokens
-    )
-    return response.choices[0].message.content.strip()
+    try:
+        response = client.chat.completions.create(
+            model= model_name,
+            temperature= temp,
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens= max_tokens
+        )
+        return response.choices[0].message.content.strip()
+    except Exception as e:
+        return None
 
 def api_call_openai_json(model_name, prompt, temp, max_tokens):
-    response = client.chat.completions.create(
-                model=model_name,
-                messages=[
-                    {"role": "user", "content": prompt},
-                ],
-                response_format={"type": "json_object"},
-                temperature=temp,
-                max_tokens=max_tokens
-            )
 
-    return json.loads(response.choices[0].message.content.strip())
+    try:
+        response = client.chat.completions.create(
+                    model=model_name,
+                    messages=[
+                        {"role": "user", "content": prompt},
+                    ],
+                    response_format={"type": "json_object"},
+                    temperature=temp,
+                    max_tokens=max_tokens
+                )
+
+        return json.loads(response.choices[0].message.content.strip())
+    
+    except Exception as e:
+        return None
 
 
 def api_call_claude(model, prompt,temp = 0.5, max_tokens=2048):
@@ -939,6 +947,9 @@ def get_objects(no_of_objects, temp, max_tokens, file_path):
     objects = pd.read_csv(file_path)["Object"].to_list()
     print(objects[:5])
 
+    # Sample only the required number of objects
+    objects = objects[:no_of_objects]
+
     return objects
 
 # Function to check if the objects.csv file has equal or more than the number of objects required
@@ -990,7 +1001,6 @@ def get_last_object_id(file_name):
         else:
             return 0
 
-
 #function to get the number of questions asked by the questioner to guess the object
 def game(object, questioner_prompt, temp, max_tokens):
 
@@ -1022,7 +1032,8 @@ def game(object, questioner_prompt, temp, max_tokens):
         while True:
             if(times_runned>10):
                 print("Failed to generate all objects")
-                break
+                return [questioner_prompt, object, [], [], [], 20, False]
+                
             
             question_json = api_call_openai_json("gpt-4o-mini-2024-07-18", prompt_to_questioner(questioner_prompt, no_of_questions, questions_asked, responses, guesses), temp, max_tokens)
             question = extract_question(question_json)
@@ -1040,7 +1051,8 @@ def game(object, questioner_prompt, temp, max_tokens):
         while True:
             if(times_runned>10):
                 print("Failed to answer the questions correclty")
-                break
+                return [questioner_prompt, object, [], [], [], 20, False]
+                
 
             response_json = api_call_openai_json("gpt-4o-mini-2024-07-18", prompt_to_answerer(object, question), temp, max_tokens)
             response = extract_answer(response_json)
@@ -1056,7 +1068,8 @@ def game(object, questioner_prompt, temp, max_tokens):
         while True:
             if(times_runned>10):
                 print("Failed to guess in correct format")
-                break
+                return [questioner_prompt, object, [], [], [], 20, False]
+                
             
             guess_json = api_call_openai_json("gpt-4o-mini-2024-07-18", prompt_to_guesser(no_of_questions, questions_asked, responses, guesses), temp, max_tokens)
             guess = extract_guess(guess_json)
@@ -1082,15 +1095,18 @@ def game(object, questioner_prompt, temp, max_tokens):
     end_time = time.time()
     print(f"Time taken to complete the game: {end_time - start_time} seconds")
     print("Game completed!")
+
     # make a list of all the questions asked by the questioner, the responses given by the answerer, the guesses made by the questioner, the number of questions asked by the questioner, and whether the questioner guessed the object correctly or not and then return the list named results
     results = [questioner_prompt, object, questions_asked, responses, guesses, no_of_questions, guessed_correctly]
     return results
 
-
+    
 def extract_question(json_response):
     """
     Extracts the question from the JSON response if it meets all criteria.
     """
+    if json_response is None:
+        return None
     # Define the required keys
     required_keys = ["question"]
 
@@ -1107,6 +1123,9 @@ def extract_answer(json_response):
     """
     Extracts the answer from the JSON response if it meets all criteria.
     """
+
+    if json_response is None:
+        return None
     # Define the required keys
     required_keys = ["answer"]
 
@@ -1126,6 +1145,8 @@ def extract_guess(json_response):
     """
     Extracts the guess from the JSON response if it meets all criteria.
     """
+    if json_response is None:
+        return None
     # Define the required keys
     required_keys = ["guess"]
 
@@ -1566,21 +1587,18 @@ def league(prompts, objects, k, league_no, temp, max_tokens, human = False, huma
         results_dict = {}  # Dictionary to hold results temporarily
         for future in concurrent.futures.as_completed(future_to_battle):
             index, i, j, which = future_to_battle[future]
-            try:
-                result = future.result()
-                if which == 'first':
-                    if (index, i, j) in results_dict:
-                        results_dict[(index, i, j)][0] = result
-                    else:
-                        results_dict[(index, i, j)] = [result, None]
+            
+            result = future.result()
+            if which == 'first':
+                if (index, i, j) in results_dict:
+                    results_dict[(index, i, j)][0] = result
                 else:
-                    if (index, i, j) in results_dict:
-                        results_dict[(index, i, j)][1] = result  # Store result_2
-                    else:
-                        results_dict[(index, i, j)] = [None, result]
-            except Exception as exc:
-                print(f'Game {i} vs {j} ({which}) generated an exception: {exc}')
-                results_dict[(index, i, j)] = [None, None]  # In case of failure, store None
+                    results_dict[(index, i, j)] = [result, None]
+            else:
+                if (index, i, j) in results_dict:
+                    results_dict[(index, i, j)][1] = result  # Store result_2
+                else:
+                    results_dict[(index, i, j)] = [None, result]
 
         # Convert dictionary to list to maintain order
         results_list = [results_dict[(index, i, j)] for index, (i, j) in enumerate(round_robin_list)]
@@ -1769,21 +1787,19 @@ def final_league(prompts, objects, k, league_no, temp, max_tokens):
         results_dict = {}  # Dictionary to hold results temporarily
         for future in concurrent.futures.as_completed(future_to_battle):
             index, i, j, which = future_to_battle[future]
-            try:
-                result = future.result()
-                if which == 'first':
-                    if (index, i, j) in results_dict:
-                        results_dict[(index, i, j)][0] = result
-                    else:
-                        results_dict[(index, i, j)] = [result, None]
+            
+            result = future.result()
+            if which == 'first':
+                if (index, i, j) in results_dict:
+                    results_dict[(index, i, j)][0] = result
                 else:
-                    if (index, i, j) in results_dict:
-                        results_dict[(index, i, j)][1] = result  # Store result_2
-                    else:
-                        results_dict[(index, i, j)] = [None, result]
-            except Exception as exc:
-                print(f'Game {i} vs {j} ({which}) generated an exception: {exc}')
-                results_dict[(index, i, j)] = [None, None]  # In case of failure, store None
+                    results_dict[(index, i, j)] = [result, None]
+            else:
+                if (index, i, j) in results_dict:
+                    results_dict[(index, i, j)][1] = result  # Store result_2
+                else:
+                    results_dict[(index, i, j)] = [None, result]
+
 
         # Convert dictionary to list to maintain order
         results_list = [results_dict[(index, i, j)] for index, (i, j) in enumerate(round_robin_list)]
@@ -1913,8 +1929,8 @@ def proof_of_concept(league1, league2, objects, k , temp, max_tokens):
 
     league_no = 1
     
-    # Select 10 random topics from the topics list
-    objects = random.sample(objects, 100)
+    # # Select 10 random topics from the topics list
+    # objects = random.sample(objects, 1)
 
     poc_elo_dict = {}
 
@@ -2016,21 +2032,17 @@ def proof_of_concept(league1, league2, objects, k , temp, max_tokens):
         results_dict = {}  # Dictionary to hold results temporarily
         for future in concurrent.futures.as_completed(future_to_battle):
             index, i, j, which = future_to_battle[future]
-            try:
-                result = future.result()
-                if which == 'first':
-                    if (index, i, j) in results_dict:
-                        results_dict[(index, i, j)][0] = result
-                    else:
-                        results_dict[(index, i, j)] = [result, None]
+            result = future.result()
+            if which == 'first':
+                if (index, i, j) in results_dict:
+                    results_dict[(index, i, j)][0] = result
                 else:
-                    if (index, i, j) in results_dict:
-                        results_dict[(index, i, j)][1] = result  # Store result_2
-                    else:
-                        results_dict[(index, i, j)] = [None, result]
-            except Exception as exc:
-                print(f'Game {i} vs {j} ({which}) generated an exception: {exc}')
-                results_dict[(index, i, j)] = [None, None]  # In case of failure, store None
+                    results_dict[(index, i, j)] = [result, None]
+            else:
+                if (index, i, j) in results_dict:
+                    results_dict[(index, i, j)][1] = result  # Store result_2
+                else:
+                    results_dict[(index, i, j)] = [None, result]
 
         # Convert dictionary to list to maintain order
         results_list = [results_dict[(index, i, j)] for index, (i, j) in enumerate(round_robin_list)]
@@ -2552,15 +2564,15 @@ def main():
     global origin_league_prompts_dict
     global top_bottom_prompts_dict_poc
 
-    no_of_objects = 200
+    no_of_objects = 3
     current_directory = os.getcwd()
     temp = [0.5]
-    max_tokens =[300]
+    max_tokens =[500]
     no_of_runs =0
 
     for no_of_prompts_start in range (10,21,2):
-        for no_of_prompts_between in range (8,21,2):
-            for k in range (3,4,1):
+        for no_of_prompts_between in range (10,21,2):
+            for k in range (5,6,1):
                 for temperature in temp:
                     for max_token in max_tokens:
                         if(no_of_runs == 1):
@@ -2570,7 +2582,7 @@ def main():
                         print("k: ", k)
                         print("temperature: ", temperature)
                         print("max_token: ", max_token)
-                        folder_name = "no_of_prompts_start_10_no_of_prompts_between_8_k_3_temperature_0.5_max_token_300 (Human Start)"
+                        folder_name = "no_of_prompts_start_"+str(no_of_prompts_start)+"_no_of_prompts_between_"+str(no_of_prompts_between)+"_k_"+str(k)+"_temperature_"+str(temperature)+"_max_token_"+str(max_token)+"_no_of_objects_"+str(no_of_objects)+"_Human_start"
                         new_directory = os.path.join(current_directory, folder_name)
                         # Check if the directory is already present then don't make the directory again
                         if os.path.exists(new_directory):

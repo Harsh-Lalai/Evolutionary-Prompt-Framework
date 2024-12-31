@@ -1,16 +1,16 @@
 Object ID,Object
-1,Oven
-2,Kite
-3,Lamp
+1,Camera
+2,Hat
+3,Satellite
 4,Helmet
 5,Telescope
-6,Hat
+6,Kite
 7,Gloves
 8,Jacket
 9,Spacecraft
 10,Star
 11,Boat
-12,Satellite
+12,Lamp
 13,Unicorn
 14,Stethoscope
 15,Pants
@@ -107,7 +107,7 @@ Object ID,Object
 106,Road
 107,Lotion
 108,Sunglasses
-109,Camera
+109,Oven
 110,Pen
 111,Chair
 112,Blender
