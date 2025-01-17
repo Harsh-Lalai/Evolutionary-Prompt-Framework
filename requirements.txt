@@ -1,0 +1,14 @@
+boto3
+botocore
+openai
+evaluate
+fuzzywuzzy
+pandas
+datasets
+nltk
+bertopic
+transformers
+gensim
+nrclex
+textstat
+tiktoken
