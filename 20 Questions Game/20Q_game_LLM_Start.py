@@ -1,28 +1,11 @@
-import boto3
-from botocore.config import Config
-import time
-from openai import OpenAI
-import csv
+import sys
 import os
-import random
-from random import sample
-import json
-import pickle
-import multiprocessing
-from multiprocessing import Pool
-import traceback
-import pandas as pd
-import math
-import concurrent.futures
-from evaluate import load
-bertscore = load("bertscore")
-from fuzzywuzzy import fuzz
 
-#-> Changing prompts to decrease errors
-#-> Another function for cost estimation
-#-> Parallel Runnning of the code
-#-> Changing the structure of the game
-# -> Checkpoint to not allow more than certain amount of API calls
+# Add the parent directory to the system path
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+# Now you can import everything from imports.py
+from imports import *
 
 # Set the API key from the environment variable
 client = OpenAI(
