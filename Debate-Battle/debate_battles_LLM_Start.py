@@ -1,20 +1,12 @@
-import openai
-from openai import OpenAI
+import sys
 import os
-import csv
-import time
-import random
-from random import sample
-import json
-from typing import Tuple, List
-import boto3
-from botocore.config import Config
-import traceback
-import pandas as pd
-import math
-import concurrent.futures
-from evaluate import load
-bertscore = load("bertscore")
+
+# Add the parent directory to the system path
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+# Now you can import everything from imports.py
+from imports import *
+
 
 topic_humans = []
 
