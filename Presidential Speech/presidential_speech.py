@@ -1,37 +1,12 @@
-import openai
-from openai import OpenAI
+import sys
 import os
-import csv
-import time
-import random
-from random import sample
-import json
-from typing import Tuple, List
-import boto3
-from botocore.config import Config
-import traceback
-import pandas as pd
-import math
-import concurrent.futures
-from evaluate import load
-bertscore = load("bertscore")
-rogue = load("rouge")
-from nltk.sentiment import SentimentIntensityAnalyzer
-from nltk import download
-from nltk.tokenize import word_tokenize
-from nltk import pos_tag
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-from bertopic import BERTopic
-from nltk.tokenize import sent_tokenize
-from transformers import pipeline
-from gensim.models import LdaModel
-from gensim import corpora
-from nrclex import NRCLex
-from collections import Counter
-import math
-import textstat
-import tiktoken
+
+# Add the parent directory to the system path
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+# Now you can import everything from imports.py
+from imports import *
+
 
 download('punkt')
 download('averaged_perceptron_tagger')
